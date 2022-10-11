@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ReproWinUI3DissapearingProgressRing (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "ReproWinUI3DissapearingProgressRing (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

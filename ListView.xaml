@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="ReproWinUI3DissapearingProgressRing.ListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ReproWinUI3DissapearingProgressRing"
+    xmlns:converters="using:CommunityToolkit.WinUI.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <converters:BoolToObjectConverter x:Key="IsTrueToVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible" />
+        <DataTemplate x:Key="MyListViewTemplate" x:DataType="local:ItemInfo">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="{x:Bind Status, Mode=OneWay}" x:Phase="1" Margin="0,5"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind ItemAnalysis.IsBeingAnalyzed, Mode=OneWay}" x:Phase="1" Margin="0,5"/>
+                <ProgressRing x:Name="ProgressRingBeingAnalyzed" Grid.Row="0" Grid.Column="2" 
+                              Value="{x:Bind ItemAnalysis.AnalysisProgress, Mode=OneWay}" IsIndeterminate="False" Margin="10,5,0,5" HorizontalAlignment="Right" 
+                              Visibility="{x:Bind ItemAnalysis.IsBeingAnalyzed, Mode=OneWay, Converter={StaticResource IsTrueToVisibilityConverter}}"
+                              Width="20" Height="20"/>
+                <CommandBar Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Background="Transparent" IsOpen="False" DefaultLabelPosition="Bottom" OverflowButtonVisibility="Collapsed"
+                            HorizontalAlignment="Right" Visibility="{x:Bind local:ListView.ShouldShowOptions(IsSelected, IsActive), Mode=OneWay}">
+                    <AppBarButton x:Name="Analyze" Tag="{x:Bind}" Icon="FourBars" Label="Analyze" Click="Analyze_Click" Visibility="Visible"/>
+                </CommandBar>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Add Item" Click="ButtonAdd_Click" />
+            <Button Content="Remove Item" Click="ButtonRemove_Click" />
+            <ListView 
+                x:Name="MyListview"
+                MinWidth="600"
+                Margin="0,0,0,5"
+                ItemTemplate="{StaticResource MyListViewTemplate}"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                CornerRadius="6"
+                SelectionMode="Single" 
+                SelectionChanged="MyListview_SelectionChanged"/>
+        </StackPanel>
+    </Grid>
+</Page>
